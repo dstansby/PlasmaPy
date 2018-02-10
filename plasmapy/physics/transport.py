@@ -47,7 +47,7 @@ def Coulomb_logarithm(T,
         the target particle.
 
     n_e : ~astropy.units.Quantity
-        The electron density in units convertible to per cubic meter.
+        The electron number density in units convertible to per cubic meter.
 
     particles : tuple
         A tuple containing string representations of the test particle
@@ -62,17 +62,18 @@ def Coulomb_logarithm(T,
 
     V : ~astropy.units.Quantity, optional
         The relative velocity between particles.  If not provided,
-        thermal velocity is assumed: :math:`\mu V^2 \sim 2 k_B T`
-        where `mu` is the reduced mass.
+        the thermal velocity is assumed (:math:`\mu V^2 \sim 2 k_B T`
+        where :math:`\mu` is the reduced mass).
 
-    method: str, optional
+    method : {'classical', 'GMS-1', 'GMS-2', 'GMS-3', 'GMS-4',
+             'GMS-5', 'GMS-6'}, optional
         Selects which theory to use when calculating the Coulomb
         logarithm. Defaults to classical method.
 
     Returns
     -------
     lnLambda : float or numpy.ndarray
-        An estimate of the Coulomb logarithm that is accurate to
+        Estimate of the Coulomb logarithm that is accurate to
         roughly its reciprocal.
 
     Raises
@@ -103,15 +104,15 @@ def Coulomb_logarithm(T,
 
     The outer impact parameter is given by the Debye length:
     :math:`b_{min} = \lambda_D` which is a function of electron
-    temperature and electron density.  At distances greater than the
+    temperature and electron number density.  At distances greater than the
     Debye length, electric fields from other particles will be
     screened out due to electrons rearranging themselves.
 
     The choice of inner impact parameter is either the distance of closest
     approach for a 90 degree Coulomb collision or the thermal deBroglie
     wavelength, whichever is larger. This is because Coulomb-style collisions
-    cannot occur for impact parameters shorter than the deBroglie 
-    wavelength because quantum effects will change the fundamental 
+    cannot occur for impact parameters shorter than the deBroglie
+    wavelength because quantum effects will change the fundamental
     nature of the collision [2]_, [3]_.
 
     Errors associated with the classical Coulomb logarithm are of order its
@@ -125,7 +126,7 @@ def Coulomb_logarithm(T,
     the methods [4]_. The GMS-1 through GMS-6 methods correspond
     to the methods found it that table.
 
-    It should be noted that GMS-4 thru GMS-6 modify the Coulomb
+    It should be noted that GMS-4 through GMS-6 modify the Coulomb
     logarithm to the form:
 
     .. math::
@@ -274,16 +275,16 @@ def b_perp(T,
     T : ~astropy.units.Quantity
         Temperature in units of temperature or energy per particle,
         which is assumed to be equal for both the test particle and
-        the target particle
+        the target particle.
 
     particles : tuple
         A tuple containing string representations of the test particle
-        (listed first) and the target particle (listed second)
+        (listed first) and the target particle (listed second).
 
     V : ~astropy.units.Quantity, optional
-        The relative velocity between particles.  If not provided,
+        The relative velocity between particles. If not provided,
         thermal velocity is assumed: :math:`\mu V^2 \sim 2 k_B T`
-        where `mu` is the reduced mass.
+        where :math:`\mu` is the reduced mass.
 
     Returns
     -------
@@ -297,7 +298,7 @@ def b_perp(T,
         any of the inputs contain incorrect values.
 
     UnitConversionError
-        If the units on any of the inputs are incorrect
+        If the units on any of the inputs are incorrect.
 
     UserWarning
         If the inputted velocity is greater than 80% of the speed of
@@ -350,7 +351,8 @@ def impact_parameter(T,
                      z_mean=np.nan*u.dimensionless_unscaled,
                      V=np.nan*u.m/u.s,
                      method="classical"):
-    r"""Impact parameters for classical and quantum Coulomb collision
+    r"""
+    Impact parameters for classical and quantum Coulomb collision
 
     Parameters
     ----------
@@ -358,14 +360,14 @@ def impact_parameter(T,
     T : ~astropy.units.Quantity
         Temperature in units of temperature or energy per particle,
         which is assumed to be equal for both the test particle and
-        the target particle
+        the target particle.
 
     n_e : ~astropy.units.Quantity
-        The electron density in units convertible to per cubic meter.
+        The electron number density in units convertible to per cubic meter.
 
     particles : tuple
         A tuple containing string representations of the test particle
-        (listed first) and the target particle (listed second)
+        (listed first) and the target particle (listed second).
 
     z_mean : ~astropy.units.Quantity, optional
         The average ionization (arithmetic mean) for a plasma where the
@@ -377,7 +379,7 @@ def impact_parameter(T,
     V : ~astropy.units.Quantity, optional
         The relative velocity between particles.  If not provided,
         thermal velocity is assumed: :math:`\mu V^2 \sim 2 k_B T`
-        where `mu` is the reduced mass.
+        where :math:`\mu` is the reduced mass.
 
     method: str, optional
         Selects which theory to use when calculating the Coulomb
@@ -385,7 +387,7 @@ def impact_parameter(T,
 
     Returns
     -------
-    bmin, bmax : tuple of floats
+    bmin, bmax : tuple of `~astropy.units.Quantity`
         The minimum and maximum impact parameters (distances) for a
         Coulomb collision.
 
@@ -571,7 +573,7 @@ def collision_frequency(T,
 
     Returns
     -------
-    freq : float or numpy.ndarray
+    freq : ~astropy.units.Quantity
         The collision frequency of particles in a plasma.
 
     Raises
@@ -598,7 +600,7 @@ def collision_frequency(T,
         \nu = n \sigma v \ln{\Lambda}
 
     where n is the particle density, :math:`\sigma` is the collisional
-    cross-section, :math:`v` is the inter-particle velocity (typically 
+    cross-section, :math:`v` is the inter-particle velocity (typically
     taken as the thermal velocity), and :math:`\ln{\Lambda}` is the Coulomb
     logarithm accounting for small angle collisions.
 
@@ -693,7 +695,8 @@ def mean_free_path(T,
                    z_mean=np.nan*u.dimensionless_unscaled,
                    V=np.nan*u.m/u.s,
                    method="classical"):
-    r"""Collisional mean free path (m)
+    r"""
+    Collisional mean free path.
 
     Parameters
     ----------
@@ -701,14 +704,14 @@ def mean_free_path(T,
     T : ~astropy.units.Quantity
         Temperature in units of temperature or energy per particle,
         which is assumed to be equal for both the test particle and
-        the target particle
+        the target particle.
 
     n_e : ~astropy.units.Quantity
-        The electron density in units convertible to per cubic meter.
+        The electron number density in units convertible to per cubic meter.
 
     particles : tuple
         A tuple containing string representations of the test particle
-        (listed first) and the target particle (listed second)
+        (listed first) and the target particle (listed second).
 
     z_mean : ~astropy.units.Quantity, optional
         The average ionization (arithmetic mean) for a plasma where the
@@ -738,7 +741,7 @@ def mean_free_path(T,
         any of the inputs contain incorrect values.
 
     UnitConversionError
-        If the units on any of the inputs are incorrect
+        If the units on any of the inputs are incorrect.
 
     UserWarning
         If the inputted velocity is greater than 80% of the speed of
@@ -798,7 +801,8 @@ def Spitzer_resistivity(T,
                         z_mean=np.nan*u.dimensionless_unscaled,
                         V=np.nan*u.m/u.s,
                         method="classical"):
-    r"""Spitzer resistivity of a plasma
+    r"""
+    Spitzer resistivity of a plasma.
 
     Parameters
     ----------
@@ -809,11 +813,11 @@ def Spitzer_resistivity(T,
         and electron-ion collisions, and the ion temperature for
         ion-ion collisions.
 
-
     n : ~astropy.units.Quantity
         The density in units convertible to per cubic meter.
-        This should be the electron density for electron-electron collisions,
-        and the ion density for electron-ion and ion-ion collisions.
+        This should be the electron number density for electron-electron
+        collisions, and the ion number density for electron-ion and
+        ion-ion collisions.
 
     z_mean : ~astropy.units.Quantity, optional
         The average ionization (arithmetic mean) for a plasma where the
@@ -824,7 +828,7 @@ def Spitzer_resistivity(T,
 
     particles : tuple
         A tuple containing string representations of the test particle
-        (listed first) and the target particle (listed second)
+        (listed first) and the target particle (listed second).
 
     V : ~astropy.units.Quantity, optional
         The relative velocity between particles.  If not provided,
@@ -984,7 +988,7 @@ def mobility(T,
     where :math:`q` is the particle charge, :math:`m` is the particle mass
     and :math:`\nu` is the collisional frequency of the particle in the
     plasma.
-    
+
     The mobility describes the forced diffusion of a particle in a collisional
     plasma which is under the influence of an electric field. The mobility
     is essentially the ratio of drift velocity due to collisions and the
@@ -1210,7 +1214,7 @@ def coupling_parameter(T,
 
     .. math::
         E_{Coulomb} = \frac{Z_1 Z_2 q_e^2}{4 \pi \epsilon_0 r}
-        
+
     where :math:`r` is the Wigner-Seitz radius, and 1 and 2 refer to
     particle species 1 and 2 between which we want to determine the
     coupling.
@@ -1230,7 +1234,7 @@ def coupling_parameter(T,
         E_{kinetic} = 2 k_B T_e / \chi f_{3/2} (\mu_{ideal} / k_B T_e)
 
     where :math:`\chi` is the degeneracy parameter, :math:`f_{3/2}` is the
-    Fermi integral, and :math:`\mu_{ideal}` is the ideal chemical 
+    Fermi integral, and :math:`\mu_{ideal}` is the ideal chemical
     potential.
 
     The degeneracy parameter is given by
